@@ -7,7 +7,6 @@ import { CustomEditorHelper } from '../../helper/CustomEditor';
 
 export function Toolbar(props: { editor: CustomEditor }) {
     const { editor } = props;
-    console.log('editor: ', editor);
 
     return (
         <div className='flex p-2 bg-white sticky top-0 z-999 opacity-100 border-x-0 border border-solid border-gray-200' style={{ background: 'rgba(255,255,255,2)' }}>

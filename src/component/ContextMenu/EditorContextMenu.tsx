@@ -6,8 +6,6 @@ export default function EditorContextMenu() {
     const [rightClickInfo, setRightClickInfo] = useState<React.MouseEvent<HTMLDivElement, MouseEvent>>();
     const [isShow, setIsShow] = useState<boolean>(false);
 
-
-
     return (
         <div>
 

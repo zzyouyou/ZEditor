@@ -28,6 +28,7 @@ export type CodeElement = {
 // 需求条目
 export type RequirementElement = {
   type: E_PARAGRAPH_TYPE.requirement
+  system:"CSCI"|"NORMAL"
   children: CustomText[]
 }
 
@@ -43,4 +44,8 @@ declare module 'slate' {
     Element: CustomElement
     Text: CustomText
   }
+
+  interface RenderElementProps {
+    element: CustomElement
+  } 
 }
