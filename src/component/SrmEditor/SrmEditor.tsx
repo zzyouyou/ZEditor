@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { BaseRange, createEditor } from 'slate'
+import { BaseRange, Editor, Transforms, createEditor } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import "./srmEditor.less"
 import { Toolbar } from '../Toolbar/Toolbar';
@@ -8,8 +8,13 @@ import { renderLeaf } from '../RenderLeaf/RenderLeaf';
 import { serialize } from '../../helper/serialize/serialize';
 import { CustomEditor } from '../../interface/CUstomElement'
 import { CustomEditorHelper } from '../../helper/CustomEditor'
-import { ZEditor } from '../../helper/Editor/ZEditor';
-import { ZRange } from '../../helper/Range/ZRange';
+import { ZEditor } from '../../helper/CustomApi/Editor/ZEditor';
+import { ZRange } from '../../helper/CustomApi/Range/ZRange';
+import { withHistory } from 'slate-history'
+import { withHtml } from '../../helper/Parse/HtmlParse';
+import _ from 'lodash';
+import { E_PARAGRAPH_TYPE } from '../../interface/blockType';
+import { withNormalizeNode } from '../../helper/NormalizeNode/NormalizeNode';
 
 
 /** 插件体系 */
@@ -24,11 +29,12 @@ type TYPE_EDITOR_PROP = {
     // toolbar?: React.ReactNode
 }
 
+
 // Define our app...
 export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
     const { plugins = [], boxStyle = {}, bodyStyle = {} } = props;
 
-    const [editor] = useState<CustomEditor>(() => withReact(createEditor()));
+    const [editor] = useState<CustomEditor>(() => withHtml(withReact(withHistory(withNormalizeNode(createEditor())))));
     const [target, setTarget] = useState<BaseRange | undefined>()
 
     const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -57,7 +63,6 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
             }
             case ('1'): {
                 event.preventDefault();
-                console.log('editor: ', editor);
                 break
             }
             case ('q'): {
@@ -72,22 +77,22 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
             }
             case ('/'): {
                 event.preventDefault();
-                console.log('event: ', event);
                 // CustomEditor.toggleBoldMark(editor);
                 break
             }
         }
-    }, [editor])
+    }, [editor]);
 
     const initialValue = useMemo(() => {
         const cacheData = localStorage.getItem('content');
-        if (cacheData) {
-            return JSON.parse(cacheData);
+        const serializedData = cacheData ? JSON.parse(cacheData) : null;
+        if (serializedData && !_.isEmpty(serializedData)) {
+            return serializedData;
         } else {
             return [{
-                type: 'paragraph',
+                type: E_PARAGRAPH_TYPE.paragraph,
                 children: [{ text: '' }],
-            }]
+            }];
         }
     }, [])
 
@@ -103,7 +108,6 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                     initialValue={initialValue}
                     onChange={(value) => {
                         const { selection } = editor
-                        // console.log('typeof value: ', value);  // Object
                         console.log('value: ', value);
 
                         // Save the value to Local Storage.
@@ -119,19 +123,19 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                             const wordBefore = ZEditor.before(editor, start, { unit: 'word' });// 当前行的起点位置
                             const before = wordBefore && ZEditor.before(editor, wordBefore);//获取上一行终点位置 
                             const beforeRange = before && ZEditor.range(editor, before, start);//获取当前行范围
-                            // console.log('beforeRange: ', beforeRange);
                             setTarget(beforeRange)
                         }
                     }}
 
                 >
                     {plugins.includes('toolbar') && <Toolbar editor={editor} />}
-                    {/* {props?.contextMenu&& } */}
                     <Editable
                         className='w-full h-full outline-none p-2'
                         onKeyDown={onKeyDown}
                         renderElement={renderElement}
                         renderLeaf={renderLeaf}
+                        onCopy={(e) => console.log(e)}
+                        onPaste={(e) => console.log(e)}
                         onChange={e => {
                             console.log(e);
                         }}

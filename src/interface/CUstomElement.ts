@@ -20,8 +20,21 @@ export type HeadingElement = {
 
 // 代码块
 export type CodeElement = {
-  type: E_PARAGRAPH_TYPE.code
+  type: E_PARAGRAPH_TYPE.codeBlock
   language: 'html'|'javascript'
+  children: CustomText[]
+}
+// 图片
+export type ImageElement = {
+  type: E_PARAGRAPH_TYPE.image
+  url: string
+  children: CustomText[]
+}
+
+// 链接
+export type LinkElement = {
+  type: E_PARAGRAPH_TYPE.link
+  url: string
   children: CustomText[]
 }
 
@@ -32,9 +45,9 @@ export type RequirementElement = {
   children: CustomText[]
 }
 
-export type CustomElement = ParagraphElement | HeadingElement | CodeElement | RequirementElement
+export type CustomElement = ParagraphElement | HeadingElement | CodeElement | RequirementElement | ImageElement | LinkElement;
 
-export type FormattedText = { text: string; bold?: true }
+export type FormattedText = { text: string; bold?: true; inlineCode?: true; italic?: true; underline?: true; strikethrough?: true; }
 
 export type CustomText = FormattedText
 

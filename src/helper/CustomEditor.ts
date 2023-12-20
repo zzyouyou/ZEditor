@@ -1,34 +1,14 @@
 import {  Transforms,Element   } from "slate"
 import { E_LEAF_TYPE, E_PARAGRAPH_TYPE } from "../interface/blockType"
-import { ZEditor } from "./Editor/ZEditor";
+import { ZEditor } from "./CustomApi/Editor/ZEditor";
 import { CustomEditor } from "../interface/CUstomElement";
-import { ZElement } from "./Element/ZElement";
+import { ZElement } from "./CustomApi/Element/ZElement";
 
 // Define our own custom set of helpers.
 export const CustomEditorHelper = {
-  isBoldMarkActive(editor:CustomEditor) {
-    const marks = ZEditor.marks(editor);
-    return marks ? marks.bold === true : false;
-  },
-  isCodeBlockActive(editor: CustomEditor) {
-    const [match] = ZEditor.nodes(editor, {
-      match: n => {
-        return n.type === E_PARAGRAPH_TYPE.code
-      },
-    })
-    return !!match
-  },
-  isReqBlockActive(editor: CustomEditor) {
-    const [match] = ZEditor.nodes(editor, {
-      match: n => {
-        return n.type === E_PARAGRAPH_TYPE.requirement
-      },
-    })
-    return !!match
-  },
-
+  // helper
   toggleBoldMark(editor:CustomEditor) {
-    const isActive = CustomEditorHelper.isBoldMarkActive(editor)
+    const isActive = ZEditor.isBoldMarkActive(editor)
     if (isActive) {
       ZEditor.removeMark(editor, E_LEAF_TYPE.bold)
     } else {
@@ -36,11 +16,11 @@ export const CustomEditorHelper = {
     }
   },
   toggleCodeBlock(editor:CustomEditor) {
-    const isActive = CustomEditorHelper.isCodeBlockActive(editor);
+    const isActive = ZEditor.isCodeBlockActive(editor);
     if (!isActive) {
       Transforms.wrapNodes(
         editor,
-        { type: E_PARAGRAPH_TYPE.code, language: 'html', children: [] },
+        { type: E_PARAGRAPH_TYPE.codeBlock, language: 'html', children: [] },
         {
           match: n => Element.isElement(n) && n.type === E_PARAGRAPH_TYPE.paragraph,
           split: true,
@@ -54,13 +34,13 @@ export const CustomEditorHelper = {
     } else {
       Transforms.unwrapNodes(
         editor,
-        { match: n => Element.isElement(n) && n.type === E_PARAGRAPH_TYPE.code }
+        { match: n => Element.isElement(n) && n.type === E_PARAGRAPH_TYPE.codeBlock }
       )
     }
   },
 
   toggleReqBlock(editor:CustomEditor) {
-    const isActive = CustomEditorHelper.isReqBlockActive(editor);
+    const isActive = ZEditor.isReqBlockActive(editor);
     if (!isActive) {
       Transforms.wrapNodes(
         editor,
@@ -82,11 +62,9 @@ export const CustomEditorHelper = {
       )
     }
   },
-
   testBlock(editor: CustomEditor) {
-    console.log(2);
+    console.log('editor: ', editor);
   },
-  
   // 另起一行
   createNewLine(editor: CustomEditor) {
     const anchor = editor.selection?.anchor;
@@ -98,5 +76,14 @@ export const CustomEditorHelper = {
       )
       Transforms.select(editor,{offset:0,path:[anchor.path[0]+1]})
     }
-  }
+  },
+  // insertImage
+  insertImage(editor: CustomEditor, url: string) {
+    ZEditor.isBlock
+    editor.isBlock
+    Transforms.insertNodes(
+      editor,
+      { type: E_PARAGRAPH_TYPE.image, url, children: [{ text: '' }] }
+    )
+  },
 }
