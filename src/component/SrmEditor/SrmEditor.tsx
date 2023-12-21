@@ -11,10 +11,10 @@ import { CustomEditorHelper } from '../../helper/CustomEditor'
 import { ZEditor } from '../../helper/CustomApi/Editor/ZEditor';
 import { ZRange } from '../../helper/CustomApi/Range/ZRange';
 import { withHistory } from 'slate-history'
-import { withHtml } from '../../helper/Parse/HtmlParse';
 import _ from 'lodash';
 import { E_PARAGRAPH_TYPE } from '../../interface/blockType';
 import { withNormalizeNode } from '../../helper/NormalizeNode/NormalizeNode';
+import { withParse } from '../../helper/Parse';
 
 
 /** 插件体系 */
@@ -34,7 +34,7 @@ type TYPE_EDITOR_PROP = {
 export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
     const { plugins = [], boxStyle = {}, bodyStyle = {} } = props;
 
-    const [editor] = useState<CustomEditor>(() => withHtml(withReact(withHistory(withNormalizeNode(createEditor())))));
+    const [editor] = useState<CustomEditor>(() => withParse(withReact(withHistory(withNormalizeNode(createEditor())))));
     const [target, setTarget] = useState<BaseRange | undefined>()
 
     const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -61,13 +61,35 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                 CustomEditorHelper.toggleReqBlock(editor);
                 break
             }
+
             case ('1'): {
                 event.preventDefault();
+                CustomEditorHelper.toggleHeadBlock(editor, 1);
                 break
             }
-            case ('q'): {
+            case ('2'): {
                 event.preventDefault();
-                CustomEditorHelper.testBlock(editor);
+                CustomEditorHelper.toggleHeadBlock(editor, 2);
+                break
+            }
+            case ('3'): {
+                event.preventDefault();
+                CustomEditorHelper.toggleHeadBlock(editor, 3);
+                break
+            }
+            case ('4'): {
+                event.preventDefault();
+                CustomEditorHelper.toggleHeadBlock(editor, 4);
+                break
+            }
+            case ('5'): {
+                event.preventDefault();
+                CustomEditorHelper.toggleHeadBlock(editor, 5);
+                break
+            }
+            case ('6'): {
+                event.preventDefault();
+                CustomEditorHelper.toggleHeadBlock(editor, 6);
                 break
             }
             case ('enter'): {
@@ -75,6 +97,13 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                 CustomEditorHelper.createNewLine(editor);
                 break
             }
+
+            case ('q'): {
+                event.preventDefault();
+                CustomEditorHelper.testBlock(editor);
+                break
+            }
+
             case ('/'): {
                 event.preventDefault();
                 // CustomEditor.toggleBoldMark(editor);
@@ -136,6 +165,8 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                         renderLeaf={renderLeaf}
                         onCopy={(e) => console.log(e)}
                         onPaste={(e) => console.log(e)}
+                        onDragEnd={(e) => console.log('onDragEnd', e)}
+                        onDrop={(e) => console.log('onDrop', e)}
                         onChange={e => {
                             console.log(e);
                         }}

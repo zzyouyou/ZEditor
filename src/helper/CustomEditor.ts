@@ -4,9 +4,8 @@ import { ZEditor } from "./CustomApi/Editor/ZEditor";
 import { CustomEditor } from "../interface/CUstomElement";
 import { ZElement } from "./CustomApi/Element/ZElement";
 
-// Define our own custom set of helpers.
 export const CustomEditorHelper = {
-  // helper
+  /** 标记为黑体 */
   toggleBoldMark(editor:CustomEditor) {
     const isActive = ZEditor.isBoldMarkActive(editor)
     if (isActive) {
@@ -65,7 +64,15 @@ export const CustomEditorHelper = {
   testBlock(editor: CustomEditor) {
     console.log('editor: ', editor);
   },
-  // 另起一行
+  /** 设为标题 */
+  toggleHeadBlock(editor:CustomEditor,level=1) {
+    const isActive = ZEditor.isHeadActive(editor);
+    editor.setNodes(
+        { type: isActive? E_PARAGRAPH_TYPE.paragraph: E_PARAGRAPH_TYPE.heading, level },
+        { match: n => ZElement.isElement(n) && ZEditor.isBlock(editor, n) }
+    )
+  },
+  /** 另起一行 */
   createNewLine(editor: CustomEditor) {
     const anchor = editor.selection?.anchor;
     if (anchor) {

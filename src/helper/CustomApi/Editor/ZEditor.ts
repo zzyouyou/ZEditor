@@ -25,4 +25,12 @@ export const ZEditor = {
     })
     return !!match
   },
+  isHeadActive(editor: CustomEditor) {
+    const [match] = ZEditor.nodes(editor, {
+      match: n => {
+        return n.type === E_PARAGRAPH_TYPE.heading
+      },
+    })
+    return !!match
+  },
 }

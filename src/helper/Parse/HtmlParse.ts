@@ -5,7 +5,7 @@ import { ZElement } from "../CustomApi/Element/ZElement"
 import { CustomElement } from "../../interface/CUstomElement"
 
 export const withHtml = (editor: Editor) => {
-        const { insertData, isInline, isVoid } = editor
+  const { insertData, isInline, isVoid } = editor;
 
         editor.isInline = element => {
             return element.type === E_PARAGRAPH_TYPE.link ? true : isInline(element)
