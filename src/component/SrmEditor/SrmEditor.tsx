@@ -61,6 +61,11 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                 CustomEditorHelper.toggleReqBlock(editor);
                 break
             }
+            case ('enter'): {
+                event.preventDefault();
+                CustomEditorHelper.createNewLine(editor);
+                break
+            }
 
             case ('1'): {
                 event.preventDefault();
@@ -92,21 +97,11 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                 CustomEditorHelper.toggleHeadBlock(editor, 6);
                 break
             }
-            case ('enter'): {
-                event.preventDefault();
-                CustomEditorHelper.createNewLine(editor);
-                break
-            }
+
 
             case ('q'): {
                 event.preventDefault();
                 CustomEditorHelper.testBlock(editor);
-                break
-            }
-
-            case ('/'): {
-                event.preventDefault();
-                // CustomEditor.toggleBoldMark(editor);
                 break
             }
         }
