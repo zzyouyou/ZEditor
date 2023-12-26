@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@emotion/css": "^11.11.2",
     "@rematch/core": "^2.2.0",
+    "antd": "^5.12.4",
     "classnames": "^2.3.2",
     "image-extensions": "^1.1.0",
     "is-url": "^1.2.4",
@@ -22,7 +24,8 @@
     "slate": "^0.101.4",
     "slate-history": "^0.100.0",
     "slate-hyperscript": "^0.100.0",
-    "slate-react": "^0.101.3"
+    "slate-react": "^0.101.3",
+    "slate-table": "^0.1.0"
   },
   "devDependencies": {
     "@types/is-url": "^1.2.32",

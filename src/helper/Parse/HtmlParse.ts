@@ -20,6 +20,7 @@ export const withHtml = (editor: Editor) => {
             if (html) {
               const parsed = new DOMParser().parseFromString(html, 'text/html')
               const fragment:CustomElement[] = deserializeHTMLElement(parsed.body);
+              console.log('fragment: ', fragment);
               const insertFragment: Node[] = [];
               // 只取element
               fragment.forEach(item => {
@@ -28,7 +29,7 @@ export const withHtml = (editor: Editor) => {
                 }
               })
               console.log('insertFragment: ', insertFragment);
-              Transforms.insertFragment(editor, insertFragment, {
+              Transforms.insertFragment(editor, fragment, {
                 voids: false
               })
               return;
@@ -40,8 +41,8 @@ export const withHtml = (editor: Editor) => {
 }
     
 // COMPAT: `B` is omitted here because Google Docs uses `<b>` in weird ways.
-const TEXT_TAGS = {
-  CODE: () => ({ code: true }),
+const TEXT_TAGS:Record<string,any>= {
+  CODE: () => ({ inLineCode: true }),
   DEL: () => ({ strikethrough: true }),
   EM: () => ({ italic: true }),
   I: () => ({ italic: true }),
@@ -50,7 +51,7 @@ const TEXT_TAGS = {
   U: () => ({ underline: true }),
 }
 
-const ELEMENT_TAGS = {
+const ELEMENT_TAGS:Record<string,any> = {
   A: (el:Element) => ({ type: E_PARAGRAPH_TYPE.link, url: el.getAttribute('href') }),
   BLOCKQUOTE: () => ({ type: E_PARAGRAPH_TYPE.quote }),
   H1: () => ({ type: E_PARAGRAPH_TYPE.heading, level: 1 }),
@@ -68,12 +69,14 @@ const ELEMENT_TAGS = {
 }
 
 const deserializeHTMLElement = (el:(HTMLElement|ChildNode)):any => {
+  console.log('el: ', el);
   if (el.nodeType === 3) {
     return el.textContent
   } else if (el.nodeType !== 1) {
     return null
   } else if (el.nodeName === 'BR') {
-    return '\n'
+    // return '\n'
+    return null
   }
 
   const { nodeName } = el
@@ -87,26 +90,33 @@ const deserializeHTMLElement = (el:(HTMLElement|ChildNode)):any => {
     parent = el.childNodes[0]
   }
   
-  let children = Array.from(parent.childNodes).map(deserializeHTMLElement).flat();
+  const children = Array.from(parent.childNodes).map(deserializeHTMLElement).flat();
 
-  if (children.length === 0) {
-    children = [{ text: '' }]
+  let dealChildren = children.filter(item => {
+    if (!item || /^(\n)+$/.test(item)) {
+      return false;
+    }
+    return true;
+  })
+
+  if (dealChildren.length === 0) {
+    dealChildren = [{ text: '' }]
   }
 
   if (el.nodeName === 'BODY') {
-    return jsx('fragment', {}, children);
+    return jsx('fragment', {}, dealChildren);
   }
   
   if (ELEMENT_TAGS[nodeName]) {
     const attrs = ELEMENT_TAGS[nodeName](el);
-    return jsx('element', attrs, children)
+    return jsx('element', attrs, dealChildren)
   }
 
   if (TEXT_TAGS[nodeName]) {
     const attrs = TEXT_TAGS[nodeName](el)
-    return children.map(child => jsx('text', attrs, child))
+    return dealChildren.map(child => jsx('text', attrs, child))
   }
 
   // console.log('children: ', children);
-  return children
+  return dealChildren
 }

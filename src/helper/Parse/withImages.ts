@@ -5,7 +5,7 @@ import isUrl from 'is-url'
 import imageExtensions from 'image-extensions'
 
 export const withImages = (editor:Editor) => {
-  const { insertData, isVoid } = editor
+  const { insertData, isVoid } = editor;
 
   editor.isVoid = element => {
     return element.type === E_PARAGRAPH_TYPE.image ? true : isVoid(element)

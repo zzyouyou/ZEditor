@@ -15,6 +15,7 @@ import _ from 'lodash';
 import { E_PARAGRAPH_TYPE } from '../../interface/blockType';
 import { withNormalizeNode } from '../../helper/NormalizeNode/NormalizeNode';
 import { withParse } from '../../helper/Parse';
+import { initData } from '../../interface/initData';
 
 
 /** 插件体系 */
@@ -115,7 +116,7 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
         } else {
             return [{
                 type: E_PARAGRAPH_TYPE.paragraph,
-                children: [{ text: '' }],
+                children: [initData.blankData],
             }];
         }
     }, [])
@@ -154,7 +155,7 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                 >
                     {plugins.includes('toolbar') && <Toolbar editor={editor} />}
                     <Editable
-                        className='w-full h-full outline-none p-2'
+                        className='w-full outline-none p-2'
                         onKeyDown={onKeyDown}
                         renderElement={renderElement}
                         renderLeaf={renderLeaf}

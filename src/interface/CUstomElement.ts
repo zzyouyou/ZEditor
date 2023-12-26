@@ -45,7 +45,28 @@ export type RequirementElement = {
   children: CustomText[]
 }
 
-export type CustomElement = ParagraphElement | HeadingElement | CodeElement | RequirementElement | ImageElement | LinkElement;
+// 表格
+export type TableElement = {
+  type: E_PARAGRAPH_TYPE.table
+  children: TableContentBoxElement[]
+}
+export type TableContentBoxElement = {
+  type: E_PARAGRAPH_TYPE.tableHead|E_PARAGRAPH_TYPE.tableBody|E_PARAGRAPH_TYPE.tableFooter
+  children: TableRowElement[]
+}
+export type TableRowElement = {
+  type: E_PARAGRAPH_TYPE.tableRow
+  children: TableCellElement[]
+}
+export type TableCellElement = {
+  type: E_PARAGRAPH_TYPE.tableHeadCell|E_PARAGRAPH_TYPE.tableCell
+  rowSpan?: number
+  colSpan?: number
+  children: CustomElement[]
+}
+
+
+export type CustomElement = ParagraphElement | HeadingElement | CodeElement | RequirementElement | ImageElement | LinkElement | TableElement | TableContentBoxElement | TableRowElement | TableCellElement;
 
 export type FormattedText = { text: string; bold?: true; inlineCode?: true; italic?: true; underline?: true; strikethrough?: true; }
 

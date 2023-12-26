@@ -1,5 +1,5 @@
 import { Editor } from 'slate'
-import { CustomEditor } from '../../../interface/CUstomElement';
+import { CustomEditor, CustomElement } from '../../../interface/CUstomElement';
 import { E_PARAGRAPH_TYPE } from '../../../interface/blockType';
 
 export const ZEditor = {
@@ -12,7 +12,8 @@ export const ZEditor = {
   isCodeBlockActive(editor: CustomEditor) {
     const [match] = ZEditor.nodes(editor, {
       match: n => {
-        return n.type === E_PARAGRAPH_TYPE.codeBlock
+        const { type } = n as CustomElement;
+        return type === E_PARAGRAPH_TYPE.codeBlock
       },
     })
     return !!match
@@ -20,7 +21,8 @@ export const ZEditor = {
   isReqBlockActive(editor: CustomEditor) {
     const [match] = ZEditor.nodes(editor, {
       match: n => {
-        return n.type === E_PARAGRAPH_TYPE.requirement
+        const { type } = n as CustomElement;
+        return type === E_PARAGRAPH_TYPE.requirement
       },
     })
     return !!match
@@ -28,9 +30,10 @@ export const ZEditor = {
   isHeadActive(editor: CustomEditor) {
     const [match] = ZEditor.nodes(editor, {
       match: n => {
-        return n.type === E_PARAGRAPH_TYPE.heading
+        const { type } = n as CustomElement;
+        return type === E_PARAGRAPH_TYPE.heading
       },
     })
     return !!match
-  },
+  }
 }

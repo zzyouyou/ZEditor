@@ -19,6 +19,14 @@ export enum E_PARAGRAPH_TYPE {
     numberedList = 'numberedList',
     /* 无序列表 */
     bulletedList = 'bulletedList',
+    /** 表格 */
+    table = 'table',
+    tableHead = 'tableHead',
+    tableBody = 'tableBody',
+    tableFooter = 'tableFooter',
+    tableRow = 'tableRow',
+    tableHeadCell = 'tableHeadCell',
+    tableCell = 'tableCell',
 }
 
 export enum E_LEAF_TYPE {
