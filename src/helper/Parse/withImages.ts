@@ -34,7 +34,7 @@ export const withImages = (editor:Editor) => {
       console.log('url-image');
       insertImage(editor, text)
     } else {
-      console.log('editor-image');
+      console.log('editor-image-data: ', data);
       insertData(data)
     }
   }

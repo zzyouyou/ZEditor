@@ -4,7 +4,8 @@ import { ParagraphElement } from "./EditorType/ParagraphElement"
 import { CodeElement } from "./EditorType/CodeElement"
 import { HeadElement } from "./EditorType/HeadElement"
 import { TableBodyElement, TableCellElement, TableElement, TableFootElement, TableHeadCellElement, TableHeadElement, TableRowElement } from "./EditorType/TableElement/TableElement"
-import { ContextMenu } from "../ContextMenu/ContextMenu"
+import { ImageElement } from "./EditorType/ImageElement"
+import { ReqElement } from "./EditorType/ReqBlock"
 
 /**
  * 渲染元素组件
@@ -21,9 +22,9 @@ export const renderElement = (props: RenderElementProps) => {
     else if (element.type === E_PARAGRAPH_TYPE.heading)
         result = <HeadElement {...props} />;
     else if (element.type === E_PARAGRAPH_TYPE.image)
-        result = <ParagraphElement {...props} />;
+        result = <ImageElement {...props} />;
     else if (element.type === E_PARAGRAPH_TYPE.requirement)
-        result = <ParagraphElement {...props} />;
+        result = <ReqElement {...props} />;
 
     else if (element.type === E_PARAGRAPH_TYPE.table)
         result = <TableElement {...props} />;
@@ -73,5 +74,5 @@ export const renderElement = (props: RenderElementProps) => {
     //         return <DefaultElement {...props} />
     // }
 
-    return <ContextMenu trigger={['contextMenu']} >{result}</ContextMenu>;
+    return result;
 }

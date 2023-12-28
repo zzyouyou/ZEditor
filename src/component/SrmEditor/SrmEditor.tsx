@@ -98,6 +98,41 @@ export const SrmEditor = (props: TYPE_EDITOR_PROP) => {
                 CustomEditorHelper.toggleHeadBlock(editor, 6);
                 break
             }
+            case ('p'): {
+                event.preventDefault();
+                // 检查浏览器是否支持 Clipboard API
+                if (navigator.clipboard) {
+                    // 尝试读取剪切板内容
+                    navigator.clipboard.read()
+                        .then(async clipboardData => {
+                            console.log('clipboardData: ', clipboardData);
+                            // 从clipboardData对象中获取数据
+                            for (const clipboardItem of clipboardData) {
+                                console.log('clipboardItem: ', clipboardItem);
+                                for (const type of clipboardItem.types) {
+                                    const blob = await clipboardItem.getType(type);
+                                    console.log('blob: ', blob);
+                                    console.log(URL.createObjectURL(blob));
+                                    // 使用 URL.createObjectURL() 创建表示 Blob 的 URL
+                                    const blobUrl = URL.createObjectURL(blob);
+                                    // 创建一个 Image 元素
+                                    const imgElement = document.createElement('img');
+                                    imgElement.src = blobUrl;
+                                    // 将 Image 的 src 属性设置为 Blob 的 URL
+                                    console.log('imgElement: ', imgElement);
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('无法读取剪切板内容:', error);
+                        });
+                } else {
+                    console.error('您的浏览器不支持 Clipboard API');
+                }
+
+                window.Clipboard
+                break
+            }
 
 
             case ('q'): {

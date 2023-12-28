@@ -5,6 +5,7 @@ import { ZElement } from "../CustomApi/Element/ZElement"
 import { CustomElement } from "../../interface/CUstomElement"
 
 export const withHtml = (editor: Editor) => {
+  console.log('withHtml==');
   const { insertData, isInline, isVoid } = editor;
 
         editor.isInline = element => {
@@ -16,7 +17,9 @@ export const withHtml = (editor: Editor) => {
         }
 
         editor.insertData = data => {
+          console.log('insertData-data: ', data);
             const html = data.getData('text/html')
+            console.log('html: ', html);
             if (html) {
               const parsed = new DOMParser().parseFromString(html, 'text/html')
               const fragment:CustomElement[] = deserializeHTMLElement(parsed.body);
@@ -69,7 +72,6 @@ const ELEMENT_TAGS:Record<string,any> = {
 }
 
 const deserializeHTMLElement = (el:(HTMLElement|ChildNode)):any => {
-  console.log('el: ', el);
   if (el.nodeType === 3) {
     return el.textContent
   } else if (el.nodeType !== 1) {
